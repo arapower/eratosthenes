@@ -1,55 +1,15 @@
 #!/bin/sh
 
-# エラトステネスの篩
+set -u
 
-###sample
-##include <iostream>
-##include <vector>
-#using namespace std;
-#
-#// 1 以上 N 以下の整数が素数かどうかを返す
-#vector<bool> Eratosthenes(int N) {
-#    // テーブル
-#    vector<bool> isprime(N+1, true);
-#
-#    // 1 は予めふるい落としておく
-#    isprime[1] = false;
-#
-#    // ふるい
-#    for (int p = 2; p <= N; ++p) {
-#        // すでに合成数であるものはスキップする
-#        if (!isprime[p]) continue;
-#
-#        // p 以外の p の倍数から素数ラベルを剥奪
-#        for (int q = p * 2; q <= N; q += p) {
-#            isprime[q] = false;
-#        }
-#    }
-#
-#    // 1 以上 N 以下の整数が素数かどうか
-#    return isprime;
-#}
-#
-#int main() {
-#    vector<bool> isprime = Eratosthenes(50);
-#
-#    for (int v = 2; v <= 50; ++v) {
-#        cout << v << ": "
-#             << (isprime[v] ? "prime" : "not") << endl;
-#    }
-#}
+# Sieve of Eratosthenes
+# Input: argument 1 -> limit number
+# Output: number<space>0 -> not prime number
+#         number<space>1 -> prime number
+# Reference: https://qiita.com/drken/items/3beb679e54266f20ab63
 
-limit=10000000
-time awk -v limit="$limit" 'BEGIN{
-	# 素数判定用テーブルを用意
-	# isprime: array
-	# 1は素数でないためあらかじめ除外している
-	for(i = 2; i <= limit; i++){
-		isprime[i] = 1;
-	}
-}'
-
-time awk -v limit="$limit" 'BEGIN{
+limit=$1
+awk -v limit="$limit" 'BEGIN{
 	# 素数判定用テーブルを用意
 	# isprime: array
 	# 1は素数でないためあらかじめ除外している
@@ -69,4 +29,4 @@ time awk -v limit="$limit" 'BEGIN{
 	for(v in isprime){
 		print v, isprime[v];
 	}
-}' > /dev/null
+}'
